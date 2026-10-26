@@ -24,7 +24,7 @@
               <p>
                 <strong>{% render 'mk-price', product: product %}</strong>
                 {%- if product.variants.size > 1 -%}
-                  {%- for variant in product.variants offset: 1 limit: 2 -%}{{ variant.title | escape }} {{ variant.price | money_without_trailing_zeros }}{% unless forloop.last %} · {% endunless %}{%- endfor -%}
+                  {%- for variant in product.variants offset: 1 limit: 2 -%}{{ variant.title | escape }} {% render 'mk-price', amount: variant.price %}{% unless forloop.last %} · {% endunless %}{%- endfor -%}
                 {%- else -%}
                   {{- product.description | strip_html | truncatewords: 10 | escape -}}
                 {%- endif -%}

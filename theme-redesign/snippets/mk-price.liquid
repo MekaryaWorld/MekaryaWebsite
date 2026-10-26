@@ -1,6 +1,19 @@
 {%- doc -%}
-  "from RM x" when variants differ in price, otherwise the price.
+  Prices as "RM 19,500" ("from RM x" when variants differ). Pass a product, or a bare amount in cents.
 
-  @param {product} product - The product
+  @param {product} [product] - The product
+  @param {number} [amount] - An amount in cents, used when no product is given
 {%- enddoc -%}
-{%- if product.price_varies -%}from {{ product.price_min | money_without_trailing_zeros }}{%- else -%}{{ product.price | money_without_trailing_zeros }}{%- endif -%}
+{%- liquid
+  if product
+    assign value = product.price
+    if product.price_varies
+      assign value = product.price_min
+      echo 'from '
+    endif
+  else
+    assign value = amount
+  endif
+  assign formatted = value | money_without_currency | remove: '.00'
+  echo 'RM ' | append: formatted
+-%}
