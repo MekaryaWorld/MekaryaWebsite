@@ -6,40 +6,48 @@
 -%}
 {%- render 'mk-assets' -%}
 <div class="mk">
-  <section class="mk-section mk-aero" aria-labelledby="mk-aero-title-{{ section.id }}" data-mk-track>
-    <div class="mk-aero__ground">
-      {%- render 'mk-image', image: section.settings.image, fallback: section.settings.image_file, alt: '', sizes: '100vw' -%}
-    </div>
-    <div class="mk-aero__inner">
-      <div class="mk-wrap mk-aero__head" data-mk-reveal>
+  <section class="mk-section mk-aero" aria-labelledby="mk-aero-title-{{ section.id }}">
+    <div class="mk-wrap">
+      <div class="mk-head" data-mk-reveal>
         <h2 id="mk-aero-title-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
         {%- if section.settings.text != blank -%}<p>{{ section.settings.text | escape }}</p>{%- endif -%}
       </div>
-      <div class="mk-track" tabindex="0" role="region" aria-label="{{ section.settings.heading | escape }}">
+      <ul class="mk-grid" data-mk-reveal>
         {%- for product in aero.products limit: section.settings.limit -%}
-          <a class="mk-card" href="{{ product.url }}">
-            <div class="mk-card__img">{%- render 'mk-image', image: product.featured_image, alt: product.title, sizes: '(min-width: 990px) 50vw, 100vw' -%}</div>
-            <div class="mk-card__panel">
-              <h3>{{ product.title | escape }}</h3>
-              <p>
-                <strong>{% render 'mk-price', product: product %}</strong>
+          {%- liquid
+            # Parts without their own photo borrow a build photo that shows that kind of part.
+            assign fallback = section.settings.fallback_default
+            if product.handle contains 'canard' or product.handle contains 'front-splitter'
+              assign fallback = section.settings.fallback_front
+            elsif product.handle contains 'gt-wing' or product.handle == 'rear-bumper-side-extension'
+              assign fallback = section.settings.fallback_rear
+            endif
+          -%}
+          <li>
+            <a class="mk-pcard" href="{{ product.url }}">
+              <div class="mk-pcard__img">
+                {%- render 'mk-image', image: product.featured_image, fallback: fallback, alt: product.title, sizes: '(min-width: 1200px) 25vw, (min-width: 990px) 33vw, (min-width: 480px) 50vw, 100vw' -%}
+              </div>
+              <div class="mk-pcard__body">
+                <h3>{{ product.title | escape }}</h3>
+                <p class="mk-pcard__price"><span class="mk-tag">{% render 'mk-price', product: product %}</span></p>
                 {%- if product.variants.size > 1 -%}
-                  {%- for variant in product.variants offset: 1 limit: 2 -%}{{ variant.title | escape }} {% render 'mk-price', amount: variant.price %}{% unless forloop.last %} · {% endunless %}{%- endfor -%}
-                {%- else -%}
-                  {{- product.description | strip_html | truncatewords: 10 | escape -}}
+                  <ul class="mk-pcard__mats" aria-label="Price by material">
+                    {%- for variant in product.variants limit: 3 -%}
+                      <li><span>{{ variant.title | escape }}</span>{% render 'mk-price', amount: variant.price %}</li>
+                    {%- endfor -%}
+                  </ul>
                 {%- endif -%}
-              </p>
-            </div>
-          </a>
+              </div>
+            </a>
+          </li>
         {%- else -%}
-          <p class="mk-wrap">Add products to the aero kits collection to fill this row.</p>
+          <li>Add products to the aero kits collection to fill this grid.</li>
         {%- endfor -%}
-      </div>
-      <div class="mk-wrap mk-track__nav">
-        <button class="mk-btn mk-btn--quiet" type="button" data-mk-dir="-1" aria-label="Previous parts">&larr;</button>
-        <button class="mk-btn mk-btn--quiet" type="button" data-mk-dir="1" aria-label="Next parts">&rarr;</button>
-        {%- if aero != blank -%}<a class="mk-btn" href="{{ aero.url }}">{{ section.settings.button_label | escape }}</a>{%- endif -%}
-      </div>
+      </ul>
+      {%- if aero != blank and aero.products_count > section.settings.limit -%}
+        <div class="mk-more"><a class="mk-btn mk-btn--line" href="{{ aero.url }}">{{ section.settings.button_label | escape }}</a></div>
+      {%- endif -%}
     </div>
   </section>
 </div>
@@ -53,10 +61,12 @@
     { "type": "textarea", "id": "text", "label": "Sentence", "default": "Every part in three materials: fiberglass, hybrid carbon or full carbon. Installation and a 6-month warranty included." },
     { "type": "collection", "id": "collection", "label": "Collection" },
     { "type": "text", "id": "collection_handle", "label": "Fallback collection handle", "default": "aero-kits" },
-    { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 16, "step": 1, "default": 12 },
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 4, "max": 24, "step": 1, "default": 16 },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "All aero parts" },
-    { "type": "image_picker", "id": "image", "label": "Background photo" },
-    { "type": "text", "id": "image_file", "label": "Fallback file name (Content > Files)", "default": "mekarya-black-vents.jpg" }
+    { "type": "header", "content": "Photos for parts without their own" },
+    { "type": "text", "id": "fallback_front", "label": "Canards and splitters (file name)", "default": "mekarya-civic-splitter.jpg" },
+    { "type": "text", "id": "fallback_rear", "label": "Wings and rear extensions (file name)", "default": "mekarya-black-vents.jpg" },
+    { "type": "text", "id": "fallback_default", "label": "Everything else (file name)", "default": "mekarya-rx8-wheel.jpg" }
   ],
   "presets": [{ "name": "Mekarya aero parts" }]
 }

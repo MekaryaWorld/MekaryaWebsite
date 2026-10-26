@@ -1,62 +1,11 @@
-/* Mekarya homepage behaviour: hero window, entrances, aero track arrows, build tracker demo.
+/* Mekarya homepage behaviour: fade-in entrances and the build tracker demo.
    Every part degrades to readable static content without script. Safe to load more than once
    (each mk-* section includes it) and re-runs for a section the theme editor re-renders. */
 (() => {
   if (window.mkHome) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const heroes = new Set();
   const reveals = new Set();
   let io;
-
-  const initHero = (hero) => {
-    if (reduce || hero.dataset.mkReady) return;
-    hero.dataset.mkReady = '1';
-    const text = hero.querySelector('.mk-hero__text');
-    const stage = hero.querySelector('.mk-hero__stage');
-    const state = { geo: null };
-    state.measure = () => {
-      const vw = hero.clientWidth;
-      const vh = stage.clientHeight;
-      const phone = vw < 990;
-      const w = phone ? vw * 0.78 : Math.min(vw * 0.36, (vh - 220) * 0.8);
-      const h = w * 1.25;
-      const top = phone ? vh * 0.30 : (vh - h) / 2 + 20;
-      state.geo = { l: (vw - w) / 2, r: (vw - w) / 2, t: top, b: Math.max(vh - top - h, 0), vh, phone };
-      text.style.setProperty('--mk-ib', `${state.geo.b}px`);
-      text.style.setProperty('--mk-il', `${state.geo.l}px`);
-      text.style.setProperty('--mk-ir', `${state.geo.r}px`);
-    };
-    state.update = () => {
-      const g = state.geo;
-      if (!hero.isConnected || !g) return;
-      const run = Math.max(hero.offsetHeight - g.vh, 1);
-      const y = Math.min(Math.max(-hero.getBoundingClientRect().top, 0), run);
-      const p = Math.min(y / (g.vh * (g.phone ? 0.7 : 1)), 1);
-      const k = 1 - p;
-      const s = hero.style;
-      s.setProperty('--mk-it', `${g.t * k}px`);
-      s.setProperty('--mk-ib', `${g.b * k}px`);
-      s.setProperty('--mk-il', `${g.l * k}px`);
-      s.setProperty('--mk-ir', `${g.r * k}px`);
-      s.setProperty('--mk-p', p.toFixed(3));
-      const fade = Math.max(1 - p / 0.4, 0);
-      s.setProperty('--mk-fade', fade.toFixed(3));
-      text.style.visibility = fade > 0 ? 'visible' : 'hidden';
-    };
-    state.measure(); state.update();
-    heroes.add(state);
-  };
-
-  const initTrack = (wrap) => {
-    if (wrap.dataset.mkReady) return;
-    wrap.dataset.mkReady = '1';
-    const track = wrap.querySelector('.mk-track');
-    wrap.querySelectorAll('[data-mk-dir]').forEach((b) => b.addEventListener('click', () => {
-      const card = track.querySelector('.mk-card');
-      const step = card ? card.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).columnGap) || 40) : 600;
-      track.scrollBy({ left: step * Number(b.dataset.mkDir), behavior: reduce ? 'auto' : 'smooth' });
-    }));
-  };
 
   const initTracker = (root) => {
     if (root.dataset.mkReady) return;
@@ -123,8 +72,6 @@
   const init = (scope) => {
     const roots = scope.classList && scope.classList.contains('mk') ? [scope] : [...scope.querySelectorAll('.mk')];
     if (!reduce) roots.forEach((r) => r.classList.add('mk-js'));
-    scope.querySelectorAll('.mk-hero').forEach(initHero);
-    scope.querySelectorAll('[data-mk-track]').forEach(initTrack);
     scope.querySelectorAll('[data-mk-tracker]').forEach(initTracker);
     scope.querySelectorAll('[data-mk-reveal]').forEach((el) => {
       [...el.children].forEach((c, n) => c.style.setProperty('--i', n));
@@ -141,8 +88,7 @@
   window.mkHome = { init };
   const start = () => init(document);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
-  window.addEventListener('scroll', () => requestAnimationFrame(() => { heroes.forEach((h) => h.update()); sweep(); }), { passive: true });
-  window.addEventListener('resize', () => heroes.forEach((h) => { h.measure(); h.update(); }));
+  window.addEventListener('scroll', () => requestAnimationFrame(sweep), { passive: true });
   // Shopify theme editor: re-run for a section after it is re-rendered.
   document.addEventListener('shopify:section:load', (e) => init(e.target));
 })();

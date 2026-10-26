@@ -13,41 +13,43 @@
 <div class="mk">
   <section class="mk-section mk-perisai" aria-labelledby="mk-perisai-title-{{ section.id }}">
     <div class="mk-wrap">
-      <div class="mk-perisai__head" data-mk-reveal>
+      <div class="mk-head" data-mk-reveal>
         <h2 id="mk-perisai-title-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
         {%- if section.settings.intro != blank -%}<p>{{ section.settings.intro | escape }}</p>{%- endif -%}
       </div>
-      <div class="mk-perisai__photo">
-        {%- liquid
-          assign photo = section.settings.image
-          if photo == blank and section.settings.image_file == blank
-            assign photo = featured.featured_image
-          endif
-          render 'mk-image', image: photo, fallback: section.settings.image_file, alt: featured.title, sizes: '100vw'
-        -%}
-      </div>
-      {%- if featured != blank -%}
-        <div class="mk-ticket" data-mk-reveal>
-          <div class="mk-ticket__main">
-            <h3>{{ section.settings.ticket_title | default: featured.title | escape }}</h3>
-            {%- if section.settings.includes != blank -%}
-              <ul class="mk-ticket__incl">
-                {%- for line in includes -%}
-                  {%- assign item = line | strip -%}
-                  {%- if item != blank -%}<li>{{ item | escape }}</li>{%- endif -%}
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-            {%- if section.settings.note != blank -%}<p class="mk-ticket__note">{{ section.settings.note | escape }}</p>{%- endif -%}
-          </div>
-          <div class="mk-ticket__stub">
-            <span class="mk-ticket__perf" aria-hidden="true">{% for i in (1..14) %}<i></i>{% endfor %}</span>
-            <p class="mk-ticket__price">{% render 'mk-price', product: featured %}</p>
-            {%- if section.settings.terms != blank -%}<p class="mk-ticket__terms">{{ section.settings.terms | escape }}</p>{%- endif -%}
-            <a class="mk-btn" href="{{ featured.url }}">{{ section.settings.button_label | escape }}</a>
-          </div>
+      <div class="mk-perisai__feature">
+        <div class="mk-perisai__photo">
+          {%- liquid
+            assign photo = section.settings.image
+            if photo == blank and section.settings.image_file == blank
+              assign photo = featured.featured_image
+            endif
+            render 'mk-image', image: photo, fallback: section.settings.image_file, alt: featured.title, sizes: '(min-width: 990px) 58vw, 100vw'
+          -%}
         </div>
-      {%- endif -%}
+        {%- if featured != blank -%}
+          <div class="mk-ticket" data-mk-reveal>
+            <div class="mk-ticket__main">
+              <h3>{{ section.settings.ticket_title | default: featured.title | escape }}</h3>
+              {%- if section.settings.includes != blank -%}
+                <ul class="mk-ticket__incl">
+                  {%- for line in includes -%}
+                    {%- assign item = line | strip -%}
+                    {%- if item != blank -%}<li>{{ item | escape }}</li>{%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+              {%- if section.settings.note != blank -%}<p class="mk-ticket__note">{{ section.settings.note | escape }}</p>{%- endif -%}
+            </div>
+            <div class="mk-ticket__stub">
+              <span class="mk-ticket__perf" aria-hidden="true">{% for i in (1..24) %}<i></i>{% endfor %}</span>
+              <p class="mk-ticket__price"><span class="mk-tag">{% render 'mk-price', product: featured %}</span></p>
+              {%- if section.settings.terms != blank -%}<p class="mk-ticket__terms">{{ section.settings.terms | escape }}</p>{%- endif -%}
+              <a class="mk-btn" href="{{ featured.url }}">{{ section.settings.button_label | escape }}</a>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
       {%- if range != blank and range.products_count > 0 -%}
         <div class="mk-range">
           <h3>{{ section.settings.range_heading | escape }}</h3>
@@ -59,13 +61,13 @@
               {%- assign shown = shown | plus: 1 -%}
               <li>
                 <a href="{{ product.url }}">
-                  <span class="mk-range__img">{%- render 'mk-image', image: product.featured_image, alt: product.title, sizes: '120px' -%}</span>
+                  <span class="mk-range__img">{%- render 'mk-image', image: product.featured_image, fallback: section.settings.image_file, alt: product.title, sizes: '240px' -%}</span>
                   <span>
                     <span class="mk-range__name">{{ product.title | escape }}</span>
-                    {%- assign desc = product.description | strip_html | truncatewords: 14 -%}
+                    {%- assign desc = product.description | strip_html | truncatewords: 16 -%}
                     {%- if desc != blank -%}<span class="mk-range__desc">{{ desc | escape }}</span>{%- endif -%}
                   </span>
-                  <span class="mk-range__price">{% render 'mk-price', product: product %}</span>
+                  <span class="mk-range__price mk-tag">{% render 'mk-price', product: product %}</span>
                 </a>
               </li>
             {%- endfor -%}
