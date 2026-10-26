@@ -1,0 +1,188 @@
+{%- comment -%}
+  Build status tracker. Customers sign in (Shopify emails them a login code) and see their
+  build. Staff edit each build on the customer page in Shopify admin (Build fields):
+  build.status, build.project, build.latest_update, build.update_history,
+  build.revision_round, build.optional_stages.
+{%- endcomment -%}
+
+{%- liquid
+  assign core_stages = 'Waitlist|Ready to scan|Scan processing|Design|Design ready to review|Revision design|Printing|Assembly|Ready to test fit' | split: '|'
+  assign optional_stages = 'Bodywork / mold prep|Molding|First unit sample|Production|Final finish' | split: '|'
+
+  if customer
+    assign build = customer.metafields.build
+    assign status = build.status.value
+    assign rounds = build.revision_round.value | default: 0
+    assign chosen = build.optional_stages.value | default: empty
+
+    assign stage_list = core_stages | join: '|'
+    for opt in optional_stages
+      if chosen contains opt or status == opt
+        assign stage_list = stage_list | append: '|' | append: opt
+      endif
+    endfor
+    assign stages = stage_list | split: '|'
+
+    assign current_index = 0
+    for s in stages
+      if s == status
+        assign current_index = forloop.index0
+      endif
+    endfor
+    assign step = current_index | plus: 1
+    assign percent = step | times: 100 | divided_by: stages.size
+  endif
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="section page-width-content color-{{ section.settings.color_scheme }} build-tracker"
+  style="padding-block: {{ section.settings['padding-block-start'] }}px {{ section.settings['padding-block-end'] }}px;"
+>
+  <h1 class="h2">{{ section.settings.heading | escape }}</h1>
+
+  {%- if customer == nil -%}
+    {%- if section.settings.intro != blank -%}
+      <p class="build-tracker__sub">{{ section.settings.intro | escape }}</p>
+    {%- endif -%}
+    <div class="build-tracker__grid">
+      <div class="build-tracker__card">
+        <h2 class="h4">Check your build</h2>
+        <p>Sign in with your email. We'll send you a one-time code, no password needed.</p>
+        <a class="button" href="{{ routes.account_login_url }}?return_url={{ request.path | url_encode }}">Sign in to view status</a>
+      </div>
+      {%- render 'build-tracker-waitlist', heading: 'Join the waitlist' -%}
+    </div>
+
+  {%- elsif status == blank -%}
+    <p class="build-tracker__sub">Signed in as {{ customer.email | escape }}.</p>
+    <div class="build-tracker__grid">
+      <div class="build-tracker__card">
+        <h2 class="h4">No build yet</h2>
+        <p>We don't have a build on file for this email. If you've already talked to us, it may still be getting set up. Check back soon, or contact us.</p>
+      </div>
+      {%- render 'build-tracker-waitlist', heading: 'Join the waitlist', email: customer.email -%}
+    </div>
+
+  {%- else -%}
+    <p class="build-tracker__sub">
+      Hi {{ customer.first_name | default: customer.name | escape }}
+      {%- if build.project.value != blank %} · {{ build.project.value | escape }}{% endif %}
+    </p>
+
+    <div class="build-tracker__current">
+      <div class="build-tracker__step">Step {{ step }} of {{ stages.size }}</div>
+      <h2 class="h3">
+        {{ status | escape }}
+        {%- if status == 'Revision design' and rounds > 0 %} (round {{ rounds }}){% endif -%}
+        {%- if status == 'Design ready to review' and rounds > 0 %} (round {{ rounds | plus: 1 }}){% endif -%}
+      </h2>
+      <p>{% render 'build-tracker-description', stage: status %}</p>
+      <div class="build-tracker__bar" role="progressbar" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100">
+        <div style="width: {{ percent }}%"></div>
+      </div>
+    </div>
+
+    <div class="build-tracker__grid">
+      <div class="build-tracker__card">
+        <h2 class="h4">Progress</h2>
+        <ol class="build-tracker__steps">
+          {%- for s in stages -%}
+            {%- liquid
+              if forloop.index0 < current_index
+                assign state = 'done'
+              elsif forloop.index0 == current_index
+                assign state = 'now'
+              else
+                assign state = 'todo'
+              endif
+              # The revision step only counts as done if the design actually went back for changes.
+              if s == 'Revision design' and state == 'done' and rounds == 0
+                assign state = 'todo'
+              endif
+            -%}
+            <li class="is-{{ state }}">
+              <span class="build-tracker__dot" aria-hidden="true">{% if state == 'done' %}✓{% endif %}</span>
+              <div>
+                <strong>{{ s | escape }}</strong>
+                {%- if s == 'Revision design' and rounds > 0 -%}
+                  <span class="build-tracker__tag">{{ rounds }} {{ rounds | pluralize: 'round', 'rounds' }}</span>
+                {%- endif -%}
+                {%- if state == 'now' -%}
+                  <small>{% render 'build-tracker-description', stage: s %}</small>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+      </div>
+
+      <div class="build-tracker__card">
+        <h2 class="h4">Updates</h2>
+        {%- if build.latest_update.value != blank -%}
+          <div class="build-tracker__latest">{{ build.latest_update.value | escape | newline_to_br }}</div>
+        {%- endif -%}
+        {%- if build.update_history.value != blank -%}
+          <ul class="build-tracker__history">
+            {%- assign lines = build.update_history.value | newline_to_br | split: '<br />' -%}
+            {%- for line in lines -%}
+              {%- assign line = line | strip -%}
+              {%- if line != blank -%}<li>{{ line | escape }}</li>{%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+        {%- if build.latest_update.value == blank and build.update_history.value == blank -%}
+          <p>No updates yet. We'll email you when there's news.</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <p class="build-tracker__foot">
+      Signed in as {{ customer.email | escape }} · <a href="{{ routes.account_logout_url }}">Sign out</a>
+    </p>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .build-tracker { --bt-line: color-mix(in srgb, currentColor 22%, transparent); --bt-soft: color-mix(in srgb, currentColor 7%, transparent); }
+  .build-tracker__sub { opacity: .75; margin: 0 0 28px; }
+  .build-tracker__grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .build-tracker__card { border: 1px solid var(--bt-line); border-radius: 12px; padding: 24px; }
+  .build-tracker__card h2 { margin-top: 0; }
+  .build-tracker__card .button { margin-top: 8px; }
+  .build-tracker__card input[type='email'] { width: 100%; margin: 6px 0 12px; }
+  .build-tracker__current { background: var(--bt-soft); border-radius: 12px; padding: 24px; margin: 0 0 24px; }
+  .build-tracker__current h2 { margin: 4px 0; }
+  .build-tracker__current p { margin: 0; }
+  .build-tracker__step { font-size: .8em; text-transform: uppercase; letter-spacing: .08em; opacity: .7; }
+  .build-tracker__bar { height: 8px; border-radius: 4px; background: var(--bt-line); margin-top: 16px; overflow: hidden; }
+  .build-tracker__bar div { height: 100%; background: currentColor; }
+  .build-tracker__steps { list-style: none; margin: 0; padding: 0; }
+  .build-tracker__steps li { display: flex; gap: 12px; align-items: flex-start; padding: 7px 0; }
+  .build-tracker__steps small { display: block; opacity: .75; }
+  .build-tracker__steps .is-todo { opacity: .5; }
+  .build-tracker__dot { flex: none; width: 22px; height: 22px; margin-top: 2px; border-radius: 50%; border: 2px solid var(--bt-line); display: grid; place-items: center; font-size: 12px; line-height: 1; }
+  .build-tracker__steps .is-done .build-tracker__dot { border-color: currentColor; background: var(--bt-soft); }
+  .build-tracker__steps .is-now .build-tracker__dot { border-color: currentColor; box-shadow: 0 0 0 4px var(--bt-soft); }
+  .build-tracker__tag { display: inline-block; margin-left: 6px; padding: 0 8px; font-size: .75em; border: 1px solid var(--bt-line); border-radius: 99px; vertical-align: middle; }
+  .build-tracker__latest { border-left: 3px solid currentColor; padding: 2px 0 2px 14px; margin-bottom: 16px; }
+  .build-tracker__history { margin: 0; padding-left: 18px; }
+  .build-tracker__history li { padding: 3px 0; }
+  .build-tracker__foot { margin-top: 24px; opacity: .75; font-size: .9em; }
+  .build-tracker__notice { padding: 10px 14px; border-radius: 8px; background: var(--bt-soft); }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Build tracker",
+  "class": "section-wrapper",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Build status" },
+    { "type": "textarea", "id": "intro", "label": "Intro (signed-out visitors)", "default": "Sign in with the email you gave us to see where your build is at." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding-block-start", "label": "Top padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding-block-end", "label": "Bottom padding", "min": 0, "max": 100, "step": 4, "unit": "px", "default": 80 }
+  ],
+  "presets": [{ "name": "Build tracker" }]
+}
+{% endschema %}

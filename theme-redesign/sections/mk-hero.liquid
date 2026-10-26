@@ -1,0 +1,89 @@
+{%- liquid
+  assign wb = collections[section.settings.facts_collection_1]
+  assign wb_min = 0
+  for p in wb.products
+    if wb_min == 0 or p.price_min < wb_min
+      assign wb_min = p.price_min
+    endif
+  endfor
+  assign ae = collections[section.settings.facts_collection_2]
+  assign ae_min = 0
+  for p in ae.products
+    if ae_min == 0 or p.price_min < ae_min
+      assign ae_min = p.price_min
+    endif
+  endfor
+-%}
+{%- render 'mk-assets' -%}
+<style>
+  .mk {
+    --mk-bg: {{ section.settings.color_bg }};
+    --mk-surface: {{ section.settings.color_surface }};
+    --mk-ink: {{ section.settings.color_ink }};
+    --mk-muted: {{ section.settings.color_muted }};
+    --mk-accent: {{ section.settings.color_accent }};
+    --mk-accent-ink: {{ section.settings.color_accent_ink }};
+  }
+</style>
+<div class="mk">
+  <section class="mk-hero" aria-labelledby="mk-hero-title-{{ section.id }}">
+    <div class="mk-wrap">
+      <div class="mk-hero__top" data-mk-reveal>
+        <h1 id="mk-hero-title-{{ section.id }}">{{ section.settings.line_1 | escape }}<br> {{ section.settings.line_2 | escape }}</h1>
+        <div class="mk-hero__aside">
+          {%- if section.settings.text != blank -%}<p class="mk-hero__lead">{{ section.settings.text | escape }}</p>{%- endif -%}
+          <div class="mk-hero__actions">
+            {%- if section.settings.button_label != blank -%}
+              <a class="mk-btn" href="{{ section.settings.button_link | default: '/collections/widebody-kits' }}">{{ section.settings.button_label | escape }}</a>
+            {%- endif -%}
+            {%- if section.settings.button_2_label != blank -%}
+              <a class="mk-btn mk-btn--line" href="{{ section.settings.button_2_link | default: '/pages/build-status' }}">{{ section.settings.button_2_label | escape }}</a>
+            {%- endif -%}
+          </div>
+          <ul class="mk-hero__facts">
+            {%- if wb_min > 0 -%}<li>{{ section.settings.facts_label_1 | escape }} <strong>from {% render 'mk-price', amount: wb_min %}</strong></li>{%- endif -%}
+            {%- if ae_min > 0 -%}<li>{{ section.settings.facts_label_2 | escape }} <strong>from {% render 'mk-price', amount: ae_min %}</strong></li>{%- endif -%}
+            {%- if section.settings.facts_extra != blank -%}<li>{{ section.settings.facts_extra | escape }}</li>{%- endif -%}
+          </ul>
+        </div>
+      </div>
+      <div class="mk-hero__pic">
+        {%- render 'mk-image', image: section.settings.image, fallback: section.settings.image_file, alt: section.settings.image_alt, loading: 'eager', sizes: '100vw' -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya hero",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "line_1", "label": "Headline, line 1", "default": "Aero kits" },
+    { "type": "text", "id": "line_2", "label": "Headline, line 2", "default": "& widebody" },
+    { "type": "textarea", "id": "text", "label": "Sentence", "default": "We 3D-scan your car, design the kit on screen and hand-finish it in fiberglass or carbon." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop widebody kits" },
+    { "type": "url", "id": "button_link", "label": "Button link", "info": "Defaults to /collections/widebody-kits" },
+    { "type": "text", "id": "button_2_label", "label": "Second button label", "default": "Track your build" },
+    { "type": "url", "id": "button_2_link", "label": "Second button link", "info": "Defaults to /pages/build-status" },
+    { "type": "header", "content": "Facts line" },
+    { "type": "text", "id": "facts_label_1", "label": "First fact", "default": "Widebody" },
+    { "type": "text", "id": "facts_collection_1", "label": "Lowest price from collection (handle)", "default": "widebody-kits" },
+    { "type": "text", "id": "facts_label_2", "label": "Second fact", "default": "Aero" },
+    { "type": "text", "id": "facts_collection_2", "label": "Lowest price from collection (handle)", "default": "aero-kits" },
+    { "type": "text", "id": "facts_extra", "label": "Third fact", "default": "Scan & design included" },
+    { "type": "header", "content": "Photo" },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Wide photos work best. Leave empty to use the file below." },
+    { "type": "text", "id": "image_file", "label": "Fallback file name (Content > Files)", "default": "mekarya-rx8-front.jpg" },
+    { "type": "text", "id": "image_alt", "label": "Photo description", "default": "Orange Mazda RX-8 with a Mekarya aero kit, parked in a car park" },
+    { "type": "header", "content": "Colours for all Mekarya sections" },
+    { "type": "color", "id": "color_bg", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "color_surface", "label": "Panels", "default": "#f5f5f5" },
+    { "type": "color", "id": "color_ink", "label": "Text", "default": "#111111" },
+    { "type": "color", "id": "color_muted", "label": "Secondary text", "default": "#5c5c5c" },
+    { "type": "color", "id": "color_accent", "label": "Accent (buttons, price tags)", "default": "#ff5b1f" },
+    { "type": "color", "id": "color_accent_ink", "label": "Text on accent", "default": "#111111" }
+  ],
+  "presets": [{ "name": "Mekarya hero" }]
+}
+{% endschema %}

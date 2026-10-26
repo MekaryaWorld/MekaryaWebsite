@@ -1,0 +1,73 @@
+{%- liquid
+  assign aero = section.settings.collection
+  if aero == blank
+    assign aero = collections[section.settings.collection_handle]
+  endif
+-%}
+{%- render 'mk-assets' -%}
+<div class="mk">
+  <section class="mk-section mk-aero" aria-labelledby="mk-aero-title-{{ section.id }}">
+    <div class="mk-wrap">
+      <div class="mk-head" data-mk-reveal>
+        <h2 id="mk-aero-title-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.text != blank -%}<p>{{ section.settings.text | escape }}</p>{%- endif -%}
+      </div>
+      <ul class="mk-grid" data-mk-reveal>
+        {%- for product in aero.products limit: section.settings.limit -%}
+          {%- liquid
+            # Parts without their own photo borrow a build photo that shows that kind of part.
+            assign fallback = section.settings.fallback_default
+            if product.handle contains 'canard' or product.handle contains 'front-splitter'
+              assign fallback = section.settings.fallback_front
+            elsif product.handle contains 'gt-wing' or product.handle == 'rear-bumper-side-extension'
+              assign fallback = section.settings.fallback_rear
+            endif
+          -%}
+          <li>
+            <a class="mk-pcard" href="{{ product.url }}">
+              <div class="mk-pcard__img">
+                {%- render 'mk-image', image: product.featured_image, fallback: fallback, alt: product.title, sizes: '(min-width: 1200px) 25vw, (min-width: 990px) 33vw, (min-width: 480px) 50vw, 100vw' -%}
+              </div>
+              <div class="mk-pcard__body">
+                <h3>{{ product.title | escape }}</h3>
+                <p class="mk-pcard__price"><span class="mk-tag">{% render 'mk-price', product: product %}</span></p>
+                {%- if product.variants.size > 1 -%}
+                  <ul class="mk-pcard__mats" aria-label="Price by material">
+                    {%- for variant in product.variants limit: 3 -%}
+                      <li><span>{{ variant.title | escape }}</span>{% render 'mk-price', amount: variant.price %}</li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            </a>
+          </li>
+        {%- else -%}
+          <li>Add products to the aero kits collection to fill this grid.</li>
+        {%- endfor -%}
+      </ul>
+      {%- if aero != blank and aero.products_count > section.settings.limit -%}
+        <div class="mk-more"><a class="mk-btn mk-btn--line" href="{{ aero.url }}">{{ section.settings.button_label | escape }}</a></div>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya aero parts",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Angkasawan aero" },
+    { "type": "textarea", "id": "text", "label": "Sentence", "default": "Every part in three materials: fiberglass, hybrid carbon or full carbon. Installation and a 6-month warranty included." },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "text", "id": "collection_handle", "label": "Fallback collection handle", "default": "aero-kits" },
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 4, "max": 24, "step": 1, "default": 16 },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "All aero parts" },
+    { "type": "header", "content": "Photos for parts without their own" },
+    { "type": "text", "id": "fallback_front", "label": "Canards and splitters (file name)", "default": "mekarya-civic-splitter.jpg" },
+    { "type": "text", "id": "fallback_rear", "label": "Wings and rear extensions (file name)", "default": "mekarya-black-vents.jpg" },
+    { "type": "text", "id": "fallback_default", "label": "Everything else (file name)", "default": "mekarya-rx8-wheel.jpg" }
+  ],
+  "presets": [{ "name": "Mekarya aero parts" }]
+}
+{% endschema %}

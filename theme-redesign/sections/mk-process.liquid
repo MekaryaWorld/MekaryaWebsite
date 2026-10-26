@@ -1,0 +1,58 @@
+{%- render 'mk-assets' -%}
+<div class="mk">
+  <section class="mk-section mk-process" aria-labelledby="mk-process-title-{{ section.id }}">
+    <div class="mk-wrap">
+      <div class="mk-head" data-mk-reveal>
+        <h2 id="mk-process-title-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.text != blank -%}<p>{{ section.settings.text | escape }}</p>{%- endif -%}
+      </div>
+      <ol class="mk-steps" data-mk-reveal>
+        {%- for block in section.blocks -%}
+          <li class="mk-step" {{ block.shopify_attributes }}>
+            <div class="mk-step__img">
+              {%- render 'mk-image', image: block.settings.image, fallback: block.settings.image_file, alt: block.settings.image_alt, sizes: '(min-width: 990px) 25vw, 50vw' -%}
+            </div>
+            <h3>{{ block.settings.word | escape }}</h3>
+            {%- if block.settings.text != blank -%}<p>{{ block.settings.text | escape }}</p>{%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ol>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya process",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "How a kit is made" },
+    { "type": "textarea", "id": "text", "label": "Sentence", "default": "Digitally engineered, hand-finished. Every kit goes through the same four steps." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "word", "label": "Verb", "default": "Scan" },
+        { "type": "textarea", "id": "text", "label": "Sentence" },
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "image_file", "label": "Fallback file name (Content > Files)" },
+        { "type": "text", "id": "image_alt", "label": "Photo description" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Mekarya process",
+      "blocks": [
+        { "type": "step", "settings": { "word": "Scan", "text": "We scan the car first, so every part is designed on screen to its real body lines, not a catalogue's.", "image_file": "mekarya-scan.jpg", "image_alt": "3D scan of a car's front bumper" } },
+        { "type": "step", "settings": { "word": "Shape", "text": "The design is printed, then laid up and shaped by hand in fiberglass, hybrid carbon or full carbon.", "image_file": "mekarya-ducktail-bench.jpg", "image_alt": "Raw ducktail spoiler on the workbench" } },
+        { "type": "step", "settings": { "word": "Fit", "text": "Raw parts are test-fitted on your car before anything is painted.", "image_file": "mekarya-subaru-fitting.jpg", "image_alt": "Raw black widebody fender test-fitted on a white Subaru" } },
+        { "type": "step", "settings": { "word": "Finish", "text": "Then they're finished, fitted and handed back. This Impreza wears the Perisai full panel.", "image_file": "mekarya-subaru-rear-wheel.jpg", "image_alt": "Finished Perisai rear arch on the white Impreza" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

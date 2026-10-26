@@ -1,0 +1,32 @@
+{%- doc -%}
+  Waitlist sign-up for the build tracker. Creates (or updates) a Shopify customer tagged
+  "build-waitlist" and subscribed to email, so build updates can be emailed to them.
+
+  @param {string} heading - Card heading
+  @param {string} [email] - Prefilled email
+{%- enddoc -%}
+
+<div class="build-tracker__card">
+  <h2 class="h4">{{ heading | escape }}</h2>
+  {%- form 'customer', id: 'BuildTrackerWaitlist' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="build-tracker__notice" role="status">You're on the list! We'll be in touch by email.</p>
+    {%- else -%}
+      <p>Leave your email and we'll reach out when your build slot opens.</p>
+      {%- if form.errors -%}
+        <p class="build-tracker__notice" role="alert">{{ form.errors | default_errors }}</p>
+      {%- endif -%}
+      <input type="hidden" name="contact[tags]" value="build-waitlist">
+      <label for="BuildTrackerWaitlist-email">Email</label>
+      <input
+        id="BuildTrackerWaitlist-email"
+        type="email"
+        name="contact[email]"
+        required
+        autocomplete="email"
+        value="{{ email | default: form.email | escape }}"
+      >
+      <button type="submit" class="button">Join waitlist</button>
+    {%- endif -%}
+  {%- endform -%}
+</div>

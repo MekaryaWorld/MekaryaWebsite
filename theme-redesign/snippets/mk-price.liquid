@@ -1,0 +1,19 @@
+{%- doc -%}
+  Prices as "RM 19,500" ("from RM x" when variants differ). Pass a product, or a bare amount in cents.
+
+  @param {product} [product] - The product
+  @param {number} [amount] - An amount in cents, used when no product is given
+{%- enddoc -%}
+{%- liquid
+  if product
+    assign value = product.price
+    if product.price_varies
+      assign value = product.price_min
+      echo 'from '
+    endif
+  else
+    assign value = amount
+  endif
+  assign formatted = value | money_without_currency | remove: '.00'
+  echo 'RM ' | append: formatted
+-%}

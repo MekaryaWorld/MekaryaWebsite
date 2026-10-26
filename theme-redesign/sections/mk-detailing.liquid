@@ -1,0 +1,44 @@
+{%- liquid
+  assign range = section.settings.collection
+  if range == blank
+    assign range = collections[section.settings.collection_handle]
+  endif
+-%}
+{%- render 'mk-assets' -%}
+<div class="mk">
+  <section class="mk-section mk-detail" aria-labelledby="mk-detail-title-{{ section.id }}">
+    <div class="mk-wrap mk-detail__grid">
+      <div class="mk-detail__copy" data-mk-reveal>
+        <h2 id="mk-detail-title-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.text != blank -%}<p>{{ section.settings.text | escape }}</p>{%- endif -%}
+        <ul>
+          {%- for product in range.products limit: section.settings.limit -%}
+            <li><a href="{{ product.url }}"><span>{{ product.title | remove_first: 'Blackout Series: ' | escape }}</span><span class="mk-tag">{% render 'mk-price', product: product %}</span></a></li>
+          {%- endfor -%}
+        </ul>
+        {%- if range != blank -%}<p><a class="mk-link" href="{{ range.url }}">{{ section.settings.link_label | escape }}</a></p>{%- endif -%}
+      </div>
+      <div class="mk-detail__img">
+        {%- render 'mk-image', image: section.settings.image, fallback: section.settings.image_file, alt: section.settings.heading, sizes: '(min-width: 990px) 58vw, 100vw' -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya detailing",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Blackout Series" },
+    { "type": "textarea", "id": "text", "label": "Sentence", "default": "Dressings and tools for tyres and trim, from the same workshop." },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "text", "id": "collection_handle", "label": "Fallback collection handle", "default": "blackout-series" },
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 1, "max": 8, "step": 1, "default": 4 },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Shop the Blackout Series" },
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "image_file", "label": "Fallback file name (Content > Files)", "default": "mekarya-blackout.jpg" }
+  ],
+  "presets": [{ "name": "Mekarya detailing" }]
+}
+{% endschema %}

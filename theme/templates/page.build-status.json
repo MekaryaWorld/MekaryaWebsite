@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "build-tracker",
+      "settings": {
+        "heading": "Build status",
+        "intro": "Sign in with the email you gave us to see where your build is at.",
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 80
+      }
+    }
+  },
+  "order": ["main"]
+}

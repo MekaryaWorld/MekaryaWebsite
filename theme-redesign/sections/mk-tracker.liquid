@@ -1,0 +1,75 @@
+{%- liquid
+  assign stages = 'waitlist|Waitlist|Waitlist|side,ready_to_scan|Ready to scan|Ready to scan|side,scan_processing|Scan processing|Scan processing|scan,design|Design|Design|scan,design_review|Design ready to review|Design review|scan,revision|Revision design|Revision|scan,printing|Printing|Printing|bench,assembly|Assembly|Assembly|bench,test_fit|Ready to test fit|Test fit|fit' | split: ','
+  assign link = section.settings.link | default: '/pages/build-status'
+-%}
+{%- render 'mk-assets' -%}
+<div class="mk">
+  <section class="mk-section mk-tracker" aria-labelledby="mk-track-title-{{ section.id }}">
+    <div class="mk-wrap mk-tracker__grid" data-mk-tracker data-start="design">
+      <div class="mk-tracker__copy" data-mk-reveal>
+        <h2 id="mk-track-title-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.text != blank -%}<p>{{ section.settings.text | escape }}</p>{%- endif -%}
+        <div class="mk-job">
+          <p class="mk-job__now" data-mk-now>Design</p>
+          <div class="mk-job__bar" data-mk-bar><span></span></div>
+          <p class="mk-job__meta">{{ section.settings.job | escape }}</p>
+          <ol class="mk-stages" aria-label="Build stages">
+            {%- for s in stages -%}
+              {%- assign p = s | split: '|' -%}
+              {%- capture msg_key -%}msg_{{ p[0] }}{%- endcapture -%}
+              <li data-stage="{{ p[0] }}" data-label="{{ p[1] }}" data-frame="{{ p[3] }}" data-msg="{{ section.settings[msg_key] | escape }}"{% if p[0] == 'design' %} class="is-now"{% endif %}><button type="button">{{ p[2] }}</button></li>
+            {%- endfor -%}
+          </ol>
+          <div class="mk-job__actions">
+            <button class="mk-btn" type="button" data-mk-next>Next stage</button>
+            <button class="mk-btn mk-btn--quiet" type="button" data-mk-revise hidden>Request changes</button>
+            <button class="mk-btn mk-btn--quiet" type="button" data-mk-reset>Start over</button>
+          </div>
+          <p class="mk-visually-hidden" aria-live="polite" data-mk-live></p>
+        </div>
+      </div>
+      <div class="mk-tracker__view" data-mk-reveal>
+        <div class="mk-tracker__frame">
+          {%- liquid
+            render 'mk-image', image: section.settings.image_side, fallback: 'mekarya-subaru-side.jpg', alt: 'The car as it arrived', sizes: '(min-width: 990px) 50vw, 100vw', class: 'is-on mk-frame-side'
+            render 'mk-image', image: section.settings.image_scan, fallback: 'mekarya-scan.jpg', alt: '3D scan used for the design', sizes: '(min-width: 990px) 50vw, 100vw', class: 'mk-frame-scan'
+            render 'mk-image', image: section.settings.image_bench, fallback: 'mekarya-ducktail-bench.jpg', alt: 'A raw part on the workbench', sizes: '(min-width: 990px) 50vw, 100vw', class: 'mk-frame-bench'
+            render 'mk-image', image: section.settings.image_fit, fallback: 'mekarya-subaru-fitting.jpg', alt: 'Raw part test-fitted on the car', sizes: '(min-width: 990px) 50vw, 100vw', class: 'mk-frame-fit'
+          -%}
+        </div>
+        <p class="mk-tracker__msg" data-mk-msg data-caption="What the customer is told"><small>What the customer is told</small>{{ section.settings.msg_design | escape }}</p>
+        <p><a class="mk-link" href="{{ link }}">{{ section.settings.link_label | escape }}</a></p>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya tracker demo",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Track your build" },
+    { "type": "textarea", "id": "text", "label": "Sentence", "default": "Every Mekarya build has a job card. Step through a sample one, the way our customers follow theirs." },
+    { "type": "text", "id": "job", "label": "Sample job line", "default": "Sample job MK-7KQ4XP · Subaru Impreza GR · Perisai full panel" },
+    { "type": "url", "id": "link", "label": "Tracker page link", "info": "Defaults to /pages/build-status" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Open your tracker" },
+    { "type": "header", "content": "Photos" },
+    { "type": "image_picker", "id": "image_side", "label": "Waitlist / ready to scan" },
+    { "type": "image_picker", "id": "image_scan", "label": "Scan and design stages" },
+    { "type": "image_picker", "id": "image_bench", "label": "Printing / assembly" },
+    { "type": "image_picker", "id": "image_fit", "label": "Test fit" },
+    { "type": "header", "content": "Messages shown for each stage" },
+    { "type": "text", "id": "msg_waitlist", "label": "Waitlist", "default": "You're on the list. We'll reach out when your build slot opens." },
+    { "type": "text", "id": "msg_ready_to_scan", "label": "Ready to scan", "default": "Your slot is open. Bring the car in for its 3D scan on Saturday." },
+    { "type": "text", "id": "msg_scan_processing", "label": "Scan processing", "default": "Scan captured. We're cleaning it up for design." },
+    { "type": "text", "id": "msg_design", "label": "Design", "default": "Our designers are drawing your fenders on the scan." },
+    { "type": "text", "id": "msg_design_review", "label": "Design ready to review", "default": "Your design is ready. Take a look and tell us what to change." },
+    { "type": "text", "id": "msg_revision", "label": "Revision design", "default": "We're widening the rear arch by 10 mm, as you asked." },
+    { "type": "text", "id": "msg_printing", "label": "Printing", "default": "Approved. Your parts are being printed and laid up." },
+    { "type": "text", "id": "msg_assembly", "label": "Assembly", "default": "Parts are being trimmed and assembled by hand." },
+    { "type": "text", "id": "msg_test_fit", "label": "Ready to test fit", "default": "Your kit is ready for a test fit. Book a day to bring the car in." }
+  ],
+  "presets": [{ "name": "Mekarya tracker demo" }]
+}
+{% endschema %}

@@ -1,0 +1,22 @@
+{%- doc -%}
+  Customer-facing description of a build stage.
+
+  @param {string} stage - Stage name, e.g. "Printing"
+{%- enddoc -%}
+
+{%- case stage -%}
+  {%- when 'Waitlist' -%}You're on the list. We'll reach out when your build slot opens.
+  {%- when 'Ready to scan' -%}Your slot is open. We're ready to schedule your 3D scan.
+  {%- when 'Scan processing' -%}We've captured your scan and are cleaning it up for design.
+  {%- when 'Design' -%}Our designers are working on your part.
+  {%- when 'Design ready to review' -%}Your design is ready! Take a look and send us your feedback.
+  {%- when 'Revision design' -%}We're making the changes you asked for.
+  {%- when 'Printing' -%}Your approved design is on the printer.
+  {%- when 'Assembly' -%}Printed parts are being assembled.
+  {%- when 'Ready to test fit' -%}Your build is ready for a test fit.
+  {%- when 'Bodywork / mold prep' -%}Prepping and finishing the master for molding.
+  {%- when 'Molding' -%}Creating the production mold.
+  {%- when 'First unit sample' -%}The first unit from the mold is being made and checked.
+  {%- when 'Production' -%}Your units are in production.
+  {%- when 'Final finish' -%}Final finishing and quality check.
+{%- endcase -%}
