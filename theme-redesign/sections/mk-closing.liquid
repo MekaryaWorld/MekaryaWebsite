@@ -1,0 +1,58 @@
+{%- render 'mk-assets' -%}
+<div class="mk">
+  <section class="mk-section mk-close" aria-labelledby="mk-close-title-{{ section.id }}">
+    <div class="mk-wrap">
+      <h2 class="mk-close__name" id="mk-close-title-{{ section.id }}">{{ section.settings.wordmark | default: shop.name | escape }}</h2>
+      <div class="mk-close__row">
+        <ul class="mk-close__places">
+          {%- if section.settings.instagram != blank -%}<li><a href="{{ section.settings.instagram }}">{{ section.settings.instagram_label | escape }}</a></li>{%- endif -%}
+          {%- if section.settings.tiktok != blank -%}<li><a href="{{ section.settings.tiktok }}">{{ section.settings.tiktok_label | escape }}</a></li>{%- endif -%}
+          {%- if section.settings.email != blank -%}<li><a href="mailto:{{ section.settings.email }}">{{ section.settings.email | escape }}</a></li>{%- endif -%}
+        </ul>
+        <div class="mk-close__links">
+          {%- for i in (1..3) -%}
+            {%- capture menu_key -%}menu_{{ i }}{%- endcapture -%}
+            {%- assign menu = section.settings[menu_key] -%}
+            {%- if menu != blank -%}
+              <ul aria-label="{{ menu.title | escape }}">
+                {%- for item in menu.links -%}<li><a href="{{ item.url }}">{{ item.title | escape }}</a></li>{%- endfor -%}
+              </ul>
+            {%- elsif i == 1 -%}
+              <ul>
+                <li><a href="{{ routes.collections_url }}/widebody-kits">Widebody kits</a></li>
+                <li><a href="{{ routes.collections_url }}/aero-kits">Aero kits</a></li>
+                <li><a href="{{ routes.collections_url }}/blackout-series">Blackout Series</a></li>
+              </ul>
+            {%- elsif i == 2 -%}
+              <ul>
+                <li><a href="/pages/build-status">Track your build</a></li>
+                <li><a href="/pages/build-status">Join the waitlist</a></li>
+              </ul>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+      <div class="mk-close__legal"><span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }} · {{ section.settings.legal | escape }}</span><a class="mk-link" href="#MainContent">Back to top</a></div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya closing",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "wordmark", "label": "Wordmark", "default": "Mekarya" },
+    { "type": "text", "id": "instagram", "label": "Instagram link", "default": "https://instagram.com/mekarya.world" },
+    { "type": "text", "id": "instagram_label", "label": "Instagram label", "default": "Instagram @mekarya.world" },
+    { "type": "text", "id": "tiktok", "label": "TikTok link", "default": "https://www.tiktok.com/@mekarya.world" },
+    { "type": "text", "id": "tiktok_label", "label": "TikTok label", "default": "TikTok @mekarya.world" },
+    { "type": "text", "id": "email", "label": "Email" },
+    { "type": "link_list", "id": "menu_1", "label": "Links, column 1" },
+    { "type": "link_list", "id": "menu_2", "label": "Links, column 2" },
+    { "type": "link_list", "id": "menu_3", "label": "Links, column 3" },
+    { "type": "text", "id": "legal", "label": "Line after the copyright", "default": "Digitally engineered. Hand-finished." }
+  ],
+  "presets": [{ "name": "Mekarya closing" }]
+}
+{% endschema %}

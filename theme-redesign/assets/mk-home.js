@@ -63,7 +63,8 @@
     root.dataset.mkReady = '1';
     const stages = [...root.querySelectorAll('[data-stage]')];
     const keys = stages.map((li) => li.dataset.stage);
-    const frames = [...root.querySelectorAll('img[data-frame]')];
+    const frameOf = (img) => img.dataset.frame || ((img.className.match(/mk-frame-(\w+)/) || [])[1]);
+    const frames = [...root.querySelectorAll('.mk-tracker__frame img')].filter(frameOf);
     const now = root.querySelector('[data-mk-now]');
     const msg = root.querySelector('[data-mk-msg]');
     const bar = root.querySelector('[data-mk-bar]');
@@ -91,7 +92,7 @@
       small.textContent = msg.dataset.caption || 'What the customer is told';
       msg.append(small, document.createTextNode(li.dataset.msg));
       bar.style.setProperty('--mk-pct', `${Math.round(((i + 1) / stages.length) * 100)}%`);
-      frames.forEach((f) => f.classList.toggle('is-on', f.dataset.frame === li.dataset.frame));
+      frames.forEach((f) => f.classList.toggle('is-on', frameOf(f) === li.dataset.frame));
       next.disabled = i === stages.length - 1;
       next.textContent = key === 'design_review' ? 'Customer approves' : 'Next stage';
       revise.hidden = key !== 'design_review';

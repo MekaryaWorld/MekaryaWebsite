@@ -1,0 +1,63 @@
+{%- liquid
+  assign aero = section.settings.collection
+  if aero == blank
+    assign aero = collections[section.settings.collection_handle]
+  endif
+-%}
+{%- render 'mk-assets' -%}
+<div class="mk">
+  <section class="mk-section mk-aero" aria-labelledby="mk-aero-title-{{ section.id }}" data-mk-track>
+    <div class="mk-aero__ground">
+      {%- render 'mk-image', image: section.settings.image, fallback: section.settings.image_file, alt: '', sizes: '100vw' -%}
+    </div>
+    <div class="mk-aero__inner">
+      <div class="mk-wrap mk-aero__head" data-mk-reveal>
+        <h2 id="mk-aero-title-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.text != blank -%}<p>{{ section.settings.text | escape }}</p>{%- endif -%}
+      </div>
+      <div class="mk-track" tabindex="0" role="region" aria-label="{{ section.settings.heading | escape }}">
+        {%- for product in aero.products limit: section.settings.limit -%}
+          <a class="mk-card" href="{{ product.url }}">
+            <div class="mk-card__img">{%- render 'mk-image', image: product.featured_image, alt: product.title, sizes: '(min-width: 990px) 50vw, 100vw' -%}</div>
+            <div class="mk-card__panel">
+              <h3>{{ product.title | escape }}</h3>
+              <p>
+                <strong>{% render 'mk-price', product: product %}</strong>
+                {%- if product.variants.size > 1 -%}
+                  {%- for variant in product.variants offset: 1 limit: 2 -%}{{ variant.title | escape }} {{ variant.price | money_without_trailing_zeros }}{% unless forloop.last %} · {% endunless %}{%- endfor -%}
+                {%- else -%}
+                  {{- product.description | strip_html | truncatewords: 10 | escape -}}
+                {%- endif -%}
+              </p>
+            </div>
+          </a>
+        {%- else -%}
+          <p class="mk-wrap">Add products to the aero kits collection to fill this row.</p>
+        {%- endfor -%}
+      </div>
+      <div class="mk-wrap mk-track__nav">
+        <button class="mk-btn mk-btn--quiet" type="button" data-mk-dir="-1" aria-label="Previous parts">&larr;</button>
+        <button class="mk-btn mk-btn--quiet" type="button" data-mk-dir="1" aria-label="Next parts">&rarr;</button>
+        {%- if aero != blank -%}<a class="mk-btn" href="{{ aero.url }}">{{ section.settings.button_label | escape }}</a>{%- endif -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya aero parts",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Angkasawan aero" },
+    { "type": "textarea", "id": "text", "label": "Sentence", "default": "Every part in three materials: fiberglass, hybrid carbon or full carbon. Installation and a 6-month warranty included." },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "text", "id": "collection_handle", "label": "Fallback collection handle", "default": "aero-kits" },
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 16, "step": 1, "default": 12 },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "All aero parts" },
+    { "type": "image_picker", "id": "image", "label": "Background photo" },
+    { "type": "text", "id": "image_file", "label": "Fallback file name (Content > Files)", "default": "mekarya-black-vents.jpg" }
+  ],
+  "presets": [{ "name": "Mekarya aero parts" }]
+}
+{% endschema %}

@@ -1,0 +1,104 @@
+{%- liquid
+  assign featured = section.settings.product
+  if featured == blank
+    assign featured = all_products[section.settings.product_handle]
+  endif
+  assign range = section.settings.collection
+  if range == blank
+    assign range = collections[section.settings.collection_handle]
+  endif
+  assign includes = section.settings.includes | newline_to_br | split: '<br />'
+-%}
+{%- render 'mk-assets' -%}
+<div class="mk">
+  <section class="mk-section mk-perisai" aria-labelledby="mk-perisai-title-{{ section.id }}">
+    <div class="mk-wrap">
+      <div class="mk-perisai__head" data-mk-reveal>
+        <h2 id="mk-perisai-title-{{ section.id }}">{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.intro != blank -%}<p>{{ section.settings.intro | escape }}</p>{%- endif -%}
+      </div>
+      <div class="mk-perisai__photo">
+        {%- liquid
+          assign photo = section.settings.image
+          if photo == blank and section.settings.image_file == blank
+            assign photo = featured.featured_image
+          endif
+          render 'mk-image', image: photo, fallback: section.settings.image_file, alt: featured.title, sizes: '100vw'
+        -%}
+      </div>
+      {%- if featured != blank -%}
+        <div class="mk-ticket" data-mk-reveal>
+          <div class="mk-ticket__main">
+            <h3>{{ section.settings.ticket_title | default: featured.title | escape }}</h3>
+            {%- if section.settings.includes != blank -%}
+              <ul class="mk-ticket__incl">
+                {%- for line in includes -%}
+                  {%- assign item = line | strip -%}
+                  {%- if item != blank -%}<li>{{ item | escape }}</li>{%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+            {%- if section.settings.note != blank -%}<p class="mk-ticket__note">{{ section.settings.note | escape }}</p>{%- endif -%}
+          </div>
+          <div class="mk-ticket__stub">
+            <span class="mk-ticket__perf" aria-hidden="true">{% for i in (1..14) %}<i></i>{% endfor %}</span>
+            <p class="mk-ticket__price">{% render 'mk-price', product: featured %}</p>
+            {%- if section.settings.terms != blank -%}<p class="mk-ticket__terms">{{ section.settings.terms | escape }}</p>{%- endif -%}
+            <a class="mk-btn" href="{{ featured.url }}">{{ section.settings.button_label | escape }}</a>
+          </div>
+        </div>
+      {%- endif -%}
+      {%- if range != blank and range.products_count > 0 -%}
+        <div class="mk-range">
+          <h3>{{ section.settings.range_heading | escape }}</h3>
+          <ul data-mk-reveal>
+            {%- assign shown = 0 -%}
+            {%- for product in range.products -%}
+              {%- if product.id == featured.id -%}{%- continue -%}{%- endif -%}
+              {%- if shown >= section.settings.range_limit -%}{%- break -%}{%- endif -%}
+              {%- assign shown = shown | plus: 1 -%}
+              <li>
+                <a href="{{ product.url }}">
+                  <span class="mk-range__img">{%- render 'mk-image', image: product.featured_image, alt: product.title, sizes: '120px' -%}</span>
+                  <span>
+                    <span class="mk-range__name">{{ product.title | escape }}</span>
+                    {%- assign desc = product.description | strip_html | truncatewords: 14 -%}
+                    {%- if desc != blank -%}<span class="mk-range__desc">{{ desc | escape }}</span>{%- endif -%}
+                  </span>
+                  <span class="mk-range__price">{% render 'mk-price', product: product %}</span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya widebody ticket",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Perisai widebody" },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "Perisai means shield. Full-panel widebody for the GR Impreza, scanned to the car and made to order." },
+    { "type": "header", "content": "Featured kit" },
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "text", "id": "product_handle", "label": "Fallback product handle", "default": "subaru-impreza-widebody-kit-perisai" },
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "image_file", "label": "Fallback file name (Content > Files)", "default": "mekarya-subaru-side.jpg" },
+    { "type": "text", "id": "ticket_title", "label": "Ticket title", "default": "Subaru Impreza GR · full panel", "info": "Leave empty to use the product title." },
+    { "type": "textarea", "id": "includes", "label": "What's included (one per line)", "default": "Front lip\nFront & rear fenders\nSide skirt lip\nRear bumper side extensions\nScanning & design\nInstallation" },
+    { "type": "text", "id": "note", "label": "Small print", "default": "Paint not included. Fitting the kit means cutting into the body, done by us or a body shop you trust." },
+    { "type": "text", "id": "terms", "label": "Under the price", "default": "Made to order" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "View the kit" },
+    { "type": "header", "content": "Rest of the range" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "text", "id": "collection_handle", "label": "Fallback collection handle", "default": "widebody-kits" },
+    { "type": "text", "id": "range_heading", "label": "Heading", "default": "More from the Perisai line" },
+    { "type": "range", "id": "range_limit", "label": "Products to show", "min": 1, "max": 8, "step": 1, "default": 4 }
+  ],
+  "presets": [{ "name": "Mekarya widebody ticket" }]
+}
+{% endschema %}

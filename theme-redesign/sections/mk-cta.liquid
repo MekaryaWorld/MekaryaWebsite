@@ -1,0 +1,23 @@
+{%- render 'mk-assets' -%}
+<div class="mk">
+  <section class="mk-cta" aria-labelledby="mk-cta-title-{{ section.id }}">
+    <a href="{{ section.settings.link | default: '/pages/build-status' }}">
+      <p class="mk-cta__line">{{ section.settings.line | escape }}</p>
+      <svg class="mk-cta__arrow" viewBox="0 0 48 48" aria-hidden="true"><path d="M12 36 36 12M16 12h20v20" fill="none" stroke="currentColor" stroke-width="5"/></svg>
+      <h2 id="mk-cta-title-{{ section.id }}">{{ section.settings.word | escape }}</h2>
+    </a>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya call to action",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "line", "label": "Sentence", "default": "Join the waitlist and we'll book your scan slot." },
+    { "type": "text", "id": "word", "label": "Word", "default": "Start", "info": "One short verb, four to six letters." },
+    { "type": "url", "id": "link", "label": "Link", "info": "Defaults to /pages/build-status" }
+  ],
+  "presets": [{ "name": "Mekarya call to action" }]
+}
+{% endschema %}

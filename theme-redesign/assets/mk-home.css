@@ -352,3 +352,4 @@
 .mk [hidden] { display: none !important; }
 .mk-job .mk-btn--quiet { background: var(--mk-bg); }
 .mk-job .mk-btn--quiet:hover { background: #2a2e2c; }
+.mk .mk-placeholder { width: 100%; height: 100%; background: var(--mk-surface); fill: #3a3e3c; }

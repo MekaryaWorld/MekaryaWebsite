@@ -1,0 +1,49 @@
+{%- render 'mk-assets' -%}
+<div class="mk">
+  <section class="mk-verbs" aria-label="{{ section.settings.label | escape }}">
+    {%- for block in section.blocks -%}
+      <article class="mk-verb" {{ block.shopify_attributes }}>
+        <div class="mk-verb__img">
+          {%- render 'mk-image', image: block.settings.image, fallback: block.settings.image_file, alt: block.settings.image_alt, sizes: '100vw' -%}
+        </div>
+        <div class="mk-verb__wordbox"><h2 class="mk-verb__word">{{ block.settings.word | escape }}</h2></div>
+        {%- if block.settings.text != blank -%}<p class="mk-verb__line">{{ block.settings.text | escape }}</p>{%- endif -%}
+      </article>
+    {%- endfor -%}
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya process",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Section name for screen readers", "default": "How a Mekarya kit is made" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "word", "label": "Verb", "default": "Scan" },
+        { "type": "textarea", "id": "text", "label": "Sentence" },
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "image_file", "label": "Fallback file name (Content > Files)" },
+        { "type": "text", "id": "image_alt", "label": "Photo description" }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Mekarya process",
+      "blocks": [
+        { "type": "step", "settings": { "word": "Scan", "text": "We scan the car first, so every part is designed on screen to its real body lines, not a catalogue's.", "image_file": "mekarya-scan.jpg", "image_alt": "3D scan of a car's front bumper" } },
+        { "type": "step", "settings": { "word": "Shape", "text": "The design is printed, then laid up and shaped by hand in fiberglass, hybrid carbon or full carbon.", "image_file": "mekarya-ducktail-bench.jpg", "image_alt": "Raw ducktail spoiler on the workbench" } },
+        { "type": "step", "settings": { "word": "Fit", "text": "Raw parts are test-fitted on your car before anything is painted.", "image_file": "mekarya-subaru-fitting.jpg", "image_alt": "Raw black widebody fender test-fitted on a white Subaru" } },
+        { "type": "step", "settings": { "word": "Finish", "text": "Then they're finished, fitted and handed back. This Impreza wears the Perisai full panel.", "image_file": "mekarya-subaru-rear-wheel.jpg", "image_alt": "Finished Perisai rear arch on the white Impreza" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

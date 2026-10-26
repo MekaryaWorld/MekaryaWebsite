@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "hero": { "type": "mk-hero", "settings": {} },
+    "perisai": { "type": "mk-perisai", "settings": {} },
+    "aero": { "type": "mk-aero", "settings": {} },
+    "process": {
+      "type": "mk-process",
+      "settings": {},
+      "blocks": {
+        "scan": { "type": "step", "settings": { "word": "Scan", "text": "We scan the car first, so every part is designed on screen to its real body lines, not a catalogue's.", "image_file": "mekarya-scan.jpg", "image_alt": "3D scan of a car's front bumper" } },
+        "shape": { "type": "step", "settings": { "word": "Shape", "text": "The design is printed, then laid up and shaped by hand in fiberglass, hybrid carbon or full carbon.", "image_file": "mekarya-ducktail-bench.jpg", "image_alt": "Raw ducktail spoiler on the workbench" } },
+        "fit": { "type": "step", "settings": { "word": "Fit", "text": "Raw parts are test-fitted on your car before anything is painted.", "image_file": "mekarya-subaru-fitting.jpg", "image_alt": "Raw black widebody fender test-fitted on a white Subaru" } },
+        "finish": { "type": "step", "settings": { "word": "Finish", "text": "Then they're finished, fitted and handed back. This Impreza wears the Perisai full panel.", "image_file": "mekarya-subaru-rear-wheel.jpg", "image_alt": "Finished Perisai rear arch on the white Impreza" } }
+      },
+      "block_order": ["scan", "shape", "fit", "finish"]
+    },
+    "tracker": { "type": "mk-tracker", "settings": {} },
+    "builds": {
+      "type": "mk-builds",
+      "settings": {},
+      "blocks": {
+        "fd": { "type": "build", "settings": { "image_file": "mekarya-civic-fd.jpg", "caption": "Honda Civic FD" } },
+        "vents": { "type": "build", "settings": { "image_file": "mekarya-black-vents.jpg", "caption": "Vented fenders, custom design" } },
+        "ek": { "type": "build", "settings": { "image_file": "mekarya-civic-front.jpg", "caption": "Honda Civic EK" } }
+      },
+      "block_order": ["fd", "vents", "ek"]
+    },
+    "detailing": { "type": "mk-detailing", "settings": {} },
+    "cta": { "type": "mk-cta", "settings": {} },
+    "closing": { "type": "mk-closing", "settings": {} }
+  },
+  "order": ["hero", "perisai", "aero", "process", "tracker", "builds", "detailing", "cta", "closing"]
+}

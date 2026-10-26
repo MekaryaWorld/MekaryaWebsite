@@ -1,0 +1,37 @@
+{%- render 'mk-assets' -%}
+<div class="mk">
+  <section class="mk-hero" aria-labelledby="mk-hero-title-{{ section.id }}">
+    <div class="mk-hero__stage">
+      <div class="mk-hero__pic">
+        {%- render 'mk-image', image: section.settings.image, fallback: section.settings.image_file, alt: section.settings.image_alt, loading: 'eager' -%}
+      </div>
+      <div class="mk-hero__text">
+        <h1 id="mk-hero-title-{{ section.id }}">{{ section.settings.line_1 | escape }}<br> {{ section.settings.line_2 | escape }}</h1>
+        <div class="mk-hero__aside">
+          {%- if section.settings.text != blank -%}<p>{{ section.settings.text | escape }}</p>{%- endif -%}
+          {%- if section.settings.button_label != blank -%}
+            <a class="mk-btn" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Mekarya hero",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Portrait photos work best. Leave empty to use the file below." },
+    { "type": "text", "id": "image_file", "label": "Fallback file name (Content > Files)", "default": "mekarya-rx8-front.jpg" },
+    { "type": "text", "id": "image_alt", "label": "Photo description", "default": "Orange Mazda RX-8 with a Mekarya aero kit, parked in a dark car park" },
+    { "type": "text", "id": "line_1", "label": "Headline, line 1", "default": "Aero kits" },
+    { "type": "text", "id": "line_2", "label": "Headline, line 2", "default": "& widebody" },
+    { "type": "textarea", "id": "text", "label": "Sentence", "default": "We 3D-scan your car, design the kit on screen and hand-finish it in fiberglass or carbon." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the kits" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "Mekarya hero" }]
+}
+{% endschema %}
