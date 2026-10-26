@@ -1,0 +1,28 @@
+# Shopify app configuration for the Mekarya build tracker.
+# Run `npm run config:link` once to connect this to your app in the Shopify Dev Dashboard
+# (that fills in client_id, name and application_url).
+client_id = ""
+name = "Build Tracker"
+embedded = true
+
+[access_scopes]
+# write_app_proxy is required for the storefront tracker page at /apps/build-status
+scopes = "write_app_proxy"
+
+[app_proxy]
+url = "/proxy"
+prefix = "apps"
+subpath = "build-status"
+
+[webhooks]
+api_version = "2026-10"
+
+  # Handled by: /app/routes/webhooks.app.uninstalled.tsx
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/app/uninstalled"
+  topics = ["app/uninstalled"]
+
+  # Handled by: /app/routes/webhooks.app.scopes_update.tsx
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"

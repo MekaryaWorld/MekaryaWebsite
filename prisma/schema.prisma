@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.sqlite"
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+  refreshToken        String?
+  refreshTokenExpires DateTime?
+}
+
+// One customer build. Customers look it up on the storefront with code + email.
+model Build {
+  id             Int           @id @default(autoincrement())
+  shop           String
+  code           String        @unique
+  name           String
+  email          String
+  phone          String?
+  project        String?       // e.g. vehicle / part description
+  notes          String?       // private, staff-only notes
+  status         String        @default("waitlist")
+  revisionRound  Int           @default(0)
+  // Comma-separated keys of the optional stages that apply to this build
+  optionalStages String        @default("")
+  emailUpdates   Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  updates        BuildUpdate[]
+
+  @@index([shop, status])
+  @@index([shop, email])
+}
+
+// Timeline entry: a status change and/or a message for the customer.
+model BuildUpdate {
+  id        Int       @id @default(autoincrement())
+  buildId   Int
+  build     Build     @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  status    String
+  message   String?
+  // false = internal note, hidden from the customer and never emailed
+  public    Boolean   @default(true)
+  emailedAt DateTime?
+  emailError String?
+  createdAt DateTime  @default(now())
+
+  @@index([buildId])
+}
