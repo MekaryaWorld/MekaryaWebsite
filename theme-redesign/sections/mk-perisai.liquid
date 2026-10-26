@@ -64,7 +64,7 @@
                   <span class="mk-range__img">{%- render 'mk-image', image: product.featured_image, fallback: section.settings.image_file, alt: product.title, sizes: '240px' -%}</span>
                   <span>
                     <span class="mk-range__name">{{ product.title | escape }}</span>
-                    {%- assign desc = product.description | strip_html | truncatewords: 16 -%}
+                    {%- assign desc = product.description | replace: '</p>', ' </p>' | replace: '</li>', ' </li>' | replace: '<br>', ' ' | strip_html | replace: '&amp;', '&' | replace: '&nbsp;', ' ' | truncatewords: 16 -%}
                     {%- if desc != blank -%}<span class="mk-range__desc">{{ desc | escape }}</span>{%- endif -%}
                   </span>
                   <span class="mk-range__price mk-tag">{% render 'mk-price', product: product %}</span>
