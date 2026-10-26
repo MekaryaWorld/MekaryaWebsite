@@ -1,0 +1,9 @@
+{%- doc -%}
+  Fonts, stylesheet and script for the mk-* homepage sections. Every mk-* section renders this;
+  the browser loads each file once and mk-home.js guards against running twice.
+{%- enddoc -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+{{ 'mk-home.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'mk-home.js' | asset_url }}" defer></script>

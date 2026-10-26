@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mekarya — Aero kits & widebody, digitally engineered</title>
+<meta name="description" content="Mekarya 3D-scans your car, designs aero and widebody kits on screen and hand-finishes them in fiberglass or carbon. Malaysia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mk-home.css">
+<style>
+  /* Stand-in for the Shopify theme header, preview only. */
+  html, body { margin: 0; background: #101211; }
+  .pv-bar { position: absolute; z-index: 5; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 20px clamp(16px, 2.2vw, 32px); font: 500 15px/1 Barlow, sans-serif; color: #ecebe6; }
+  .pv-bar a { color: inherit; text-decoration: none; }
+  .pv-bar strong { font: 700 24px/1 'Barlow Condensed', sans-serif; letter-spacing: .02em; }
+  .pv-bar nav { display: flex; gap: 24px; }
+  @media (max-width: 749px) { .pv-bar nav a:not(:last-child) { display: none; } }
+</style>
+</head>
+<body>
+<div class="mk">
+  <header class="pv-bar">
+    <a href="#top"><strong>MEKARYA</strong></a>
+    <nav aria-label="Main"><a href="#perisai">Widebody</a><a href="#aero">Aero</a><a href="#track">Track your build</a><a href="#cart">Cart</a></nav>
+  </header>
+
+  <main id="top">
+    <!-- Hero: window that opens to the edges -->
+    <section class="mk-hero" aria-labelledby="mk-hero-title">
+      <div class="mk-hero__stage">
+        <div class="mk-hero__pic">
+          <img src="assets/rx8-front.jpg" width="864" height="1080" alt="Orange Mazda RX-8 with a Mekarya aero kit, parked in a dark car park" fetchpriority="high">
+        </div>
+        <div class="mk-hero__text">
+          <h1 id="mk-hero-title">Aero kits<br> &amp; widebody</h1>
+          <div class="mk-hero__aside">
+            <p>We 3D-scan your car, design the kit on screen and hand-finish it in fiberglass or carbon.</p>
+            <a class="mk-btn" href="#perisai">Shop the kits</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Perisai widebody: the ticket -->
+    <section class="mk-section mk-perisai" id="perisai" aria-labelledby="mk-perisai-title">
+      <div class="mk-wrap">
+        <div class="mk-perisai__head" data-mk-reveal>
+          <h2 id="mk-perisai-title">Perisai widebody</h2>
+          <p>Perisai means shield. Full-panel widebody for the GR Impreza, scanned to the car and made to order.</p>
+        </div>
+        <div class="mk-perisai__photo">
+          <img src="assets/subaru-side.jpg" width="1080" height="810" loading="lazy" alt="White Subaru Impreza GR hatchback wearing the black Perisai widebody">
+        </div>
+        <div class="mk-ticket" data-mk-reveal>
+          <div class="mk-ticket__main">
+            <h3>Subaru Impreza GR · full panel</h3>
+            <ul class="mk-ticket__incl">
+              <li>Front lip</li><li>Front &amp; rear fenders</li>
+              <li>Side skirt lip</li><li>Rear bumper side extensions</li>
+              <li>Scanning &amp; design</li><li>Installation</li>
+            </ul>
+            <p class="mk-ticket__note">Paint not included. Fitting the kit means cutting into the body, done by us or a body shop you trust.</p>
+          </div>
+          <div class="mk-ticket__stub">
+            <span class="mk-ticket__perf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            <p class="mk-ticket__price">RM 19,500</p>
+            <p class="mk-ticket__terms">Made to order</p>
+            <a class="mk-btn" href="#product">View the kit</a>
+          </div>
+        </div>
+        <div class="mk-range">
+          <h3>More from the Perisai line</h3>
+          <ul data-mk-reveal>
+            <li><a href="#p"><span class="mk-range__img"><img src="assets/subaru-rear-wheel.jpg" width="720" height="1080" loading="lazy" alt="Perisai rear arch on a white Impreza"></span><span><span class="mk-range__name">Perisai Arch Fender Kit</span><span class="mk-range__desc">Arched front and rear fenders with lip, skirts and extensions.</span></span><span class="mk-range__price">RM 18,000</span></a></li>
+            <li><a href="#p"><span class="mk-range__img"><img src="assets/subaru-rear.jpg" width="720" height="1080" loading="lazy" alt="Rear quarter of the Impreza with Perisai side extension"></span><span><span class="mk-range__name">Perisai Full Panel (Basic)</span><span class="mk-range__desc">Front and rear fenders, scanned and designed for your car.</span></span><span class="mk-range__price">RM 11,000</span></a></li>
+            <li><a href="#p"><span class="mk-range__img"><img src="assets/subaru-fitting.jpg" width="810" height="1080" loading="lazy" alt="Raw Perisai rear fender test-fitted"></span><span><span class="mk-range__name">Perisai Arch Fender (Basic)</span><span class="mk-range__desc">Arched front and rear fenders only.</span></span><span class="mk-range__price">RM 9,000</span></a></li>
+            <li><a href="#p"><span class="mk-range__img"><img src="assets/black-vents.jpg" width="810" height="1080" loading="lazy" alt="Fender flare with vents on a matte black car"></span><span><span class="mk-range__name">Arch Fender Flares</span><span class="mk-range__desc">Bolt-on flares, front and rear, installed.</span></span><span class="mk-range__price">RM 4,000</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Angkasawan aero: cards crossing a held photograph -->
+    <section class="mk-section mk-aero" id="aero" aria-labelledby="mk-aero-title" data-mk-track>
+      <div class="mk-aero__ground"><img src="assets/black-vents.jpg" width="810" height="1080" loading="lazy" alt=""></div>
+      <div class="mk-aero__inner">
+        <div class="mk-wrap mk-aero__head" data-mk-reveal>
+          <h2 id="mk-aero-title">Angkasawan aero</h2>
+          <p>Every part in three materials: fiberglass, hybrid carbon or full carbon. Installation and a 6-month warranty included.</p>
+        </div>
+        <div class="mk-track" tabindex="0" role="region" aria-label="Aero kit parts">
+          <a class="mk-card" href="#p"><span class="mk-card__img"><img src="assets/rx8-wheel.jpg" width="810" height="1080" loading="lazy" alt="Orange RX-8 side skirt and wheel"></span><span class="mk-card__panel"><h3>Street Aero Package</h3><p><strong>from RM 14,400</strong>Splitter, canards, skirts and diffuser, designed as one kit.</p></span></a>
+          <a class="mk-card" href="#p"><span class="mk-card__img"><img src="assets/jazz-front.jpg" width="810" height="1080" loading="lazy" alt="Red Honda Jazz with a white Mekarya front lip"></span><span class="mk-card__panel"><h3>Front Lip</h3><p><strong>from RM 3,500</strong>Hybrid carbon RM 5,250 · full carbon RM 7,000.</p></span></a>
+          <a class="mk-card" href="#p"><span class="mk-card__img"><img src="assets/civic-splitter.jpg" width="1080" height="810" loading="lazy" alt="Honda Civic bumper with a front splitter and fins on the workshop floor"></span><span class="mk-card__panel"><h3>Front Splitter with Fins</h3><p><strong>from RM 3,800</strong>Hybrid carbon RM 5,700 · full carbon RM 7,600.</p></span></a>
+          <a class="mk-card" href="#p"><span class="mk-card__img"><img src="assets/elise-rear.jpg" width="1179" height="1219" loading="lazy" alt="Orange Lotus Elise with a Mekarya ducktail"></span><span class="mk-card__panel"><h3>Ducktail Spoiler</h3><p><strong>from RM 3,000</strong>Hybrid carbon RM 4,500 · full carbon RM 6,000.</p></span></a>
+          <a class="mk-card" href="#p"><span class="mk-card__img"><img src="assets/subaru-rear.jpg" width="720" height="1080" loading="lazy" alt="Rear bumper side extension on a white Impreza"></span><span class="mk-card__panel"><h3>Rear Bumper Side Extension</h3><p><strong>from RM 2,500</strong>Hybrid carbon RM 3,750 · full carbon RM 5,000.</p></span></a>
+        </div>
+        <div class="mk-wrap mk-track__nav">
+          <button class="mk-btn mk-btn--quiet" type="button" data-mk-dir="-1" aria-label="Previous parts">&larr;</button>
+          <button class="mk-btn mk-btn--quiet" type="button" data-mk-dir="1" aria-label="Next parts">&rarr;</button>
+          <a class="mk-btn" href="#collection">All aero parts</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it's made: one verb at a time -->
+    <section class="mk-verbs" aria-label="How a Mekarya kit is made">
+      <article class="mk-verb">
+        <div class="mk-verb__img"><img src="assets/scan.jpg" width="1179" height="808" loading="lazy" alt="3D scan of a car's front bumper"></div>
+        <div class="mk-verb__wordbox"><h2 class="mk-verb__word">Scan</h2></div>
+        <p class="mk-verb__line">We scan the car first, so every part is designed on screen to its real body lines, not a catalogue's.</p>
+      </article>
+      <article class="mk-verb">
+        <div class="mk-verb__img"><img src="assets/ducktail-bench.jpg" width="810" height="1080" loading="lazy" alt="Raw ducktail spoiler on the workbench"></div>
+        <div class="mk-verb__wordbox"><h2 class="mk-verb__word">Shape</h2></div>
+        <p class="mk-verb__line">The design is printed, then laid up and shaped by hand in fiberglass, hybrid carbon or full carbon.</p>
+      </article>
+      <article class="mk-verb">
+        <div class="mk-verb__img"><img src="assets/subaru-fitting.jpg" width="810" height="1080" loading="lazy" alt="Raw black widebody fender test-fitted on a white Subaru"></div>
+        <div class="mk-verb__wordbox"><h2 class="mk-verb__word">Fit</h2></div>
+        <p class="mk-verb__line">Raw parts are test-fitted on your car before anything is painted.</p>
+      </article>
+      <article class="mk-verb">
+        <div class="mk-verb__img"><img src="assets/subaru-rear-wheel.jpg" width="720" height="1080" loading="lazy" alt="Finished Perisai rear arch on the white Impreza"></div>
+        <div class="mk-verb__wordbox"><h2 class="mk-verb__word">Finish</h2></div>
+        <p class="mk-verb__line">Then they're finished, fitted and handed back. This Impreza wears the Perisai full panel.</p>
+      </article>
+    </section>
+
+    <!-- Track your build: the live demo -->
+    <section class="mk-section mk-tracker" id="track" aria-labelledby="mk-track-title">
+      <div class="mk-wrap mk-tracker__grid" data-mk-tracker data-start="design">
+        <div class="mk-tracker__copy" data-mk-reveal>
+          <h2 id="mk-track-title">Track your build</h2>
+          <p>Every Mekarya build has a job card. Step through a sample one, the way our customers follow theirs.</p>
+          <div class="mk-job">
+            <p class="mk-job__now" data-mk-now>Design</p>
+            <div class="mk-job__bar" data-mk-bar><span></span></div>
+            <p class="mk-job__meta">Sample job MK-7KQ4XP · Subaru Impreza GR · Perisai full panel</p>
+            <ol class="mk-stages" aria-label="Build stages">
+              <li data-stage="waitlist" data-label="Waitlist" data-frame="side" data-msg="You're on the list. We'll reach out when your build slot opens."><button type="button">Waitlist</button></li>
+              <li data-stage="ready_to_scan" data-label="Ready to scan" data-frame="side" data-msg="Your slot is open. Bring the car in for its 3D scan on Saturday."><button type="button">Ready to scan</button></li>
+              <li data-stage="scan_processing" data-label="Scan processing" data-frame="scan" data-msg="Scan captured. We're cleaning it up for design."><button type="button">Scan processing</button></li>
+              <li data-stage="design" data-label="Design" data-frame="scan" data-msg="Our designers are drawing your fenders on the scan."><button type="button">Design</button></li>
+              <li data-stage="design_review" data-label="Design ready to review" data-frame="scan" data-msg="Your design is ready. Take a look and tell us what to change."><button type="button">Design review</button></li>
+              <li data-stage="revision" data-label="Revision design" data-frame="scan" data-msg="We're widening the rear arch by 10 mm, as you asked."><button type="button">Revision</button></li>
+              <li data-stage="printing" data-label="Printing" data-frame="bench" data-msg="Approved. Your parts are being printed and laid up."><button type="button">Printing</button></li>
+              <li data-stage="assembly" data-label="Assembly" data-frame="bench" data-msg="Parts are being trimmed and assembled by hand."><button type="button">Assembly</button></li>
+              <li data-stage="test_fit" data-label="Ready to test fit" data-frame="fit" data-msg="Your kit is ready for a test fit. Book a day to bring the car in."><button type="button">Test fit</button></li>
+            </ol>
+            <div class="mk-job__actions">
+              <button class="mk-btn" type="button" data-mk-next>Next stage</button>
+              <button class="mk-btn mk-btn--quiet" type="button" data-mk-revise hidden>Request changes</button>
+              <button class="mk-btn mk-btn--quiet" type="button" data-mk-reset>Start over</button>
+            </div>
+            <p class="mk-visually-hidden" aria-live="polite" data-mk-live></p>
+          </div>
+        </div>
+        <div class="mk-tracker__view" data-mk-reveal>
+          <div class="mk-tracker__frame">
+            <img data-frame="side" class="is-on" src="assets/subaru-side.jpg" width="1080" height="810" loading="lazy" alt="The Impreza as it arrived, side view">
+            <img data-frame="scan" src="assets/scan.jpg" width="1179" height="808" alt="3D scan used for the design">
+            <img data-frame="bench" src="assets/ducktail-bench.jpg" width="810" height="1080" alt="A raw part on the workbench">
+            <img data-frame="fit" src="assets/subaru-fitting.jpg" width="810" height="1080" alt="Raw fender test-fitted on the car">
+          </div>
+          <p class="mk-tracker__msg" data-mk-msg><small>What the customer is told</small>Our designers are drawing your fenders on the scan.</p>
+          <p><a class="mk-link" href="/pages/build-status">Open your tracker</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Customer builds: rising triptych -->
+    <section class="mk-section mk-builds" aria-labelledby="mk-builds-title">
+      <div class="mk-wrap">
+        <div class="mk-builds__head" data-mk-reveal>
+          <h2 id="mk-builds-title">Customer builds</h2>
+          <p>Custom designs on customers' own cars, drawn and made by Mekarya.</p>
+        </div>
+        <div class="mk-tri" data-mk-reveal>
+          <figure><img src="assets/civic-fd.jpg" width="810" height="1080" alt="Blue Honda Civic FD with a Mekarya front lip"><figcaption>Honda Civic FD</figcaption></figure>
+          <figure class="mk-tri__mid"><img src="assets/black-vents.jpg" width="810" height="1080" alt="Matte black car with red-lined vented fenders and gold wheels"><figcaption>Vented fenders, custom design</figcaption></figure>
+          <figure><img src="assets/civic-front.jpg" width="810" height="1080" alt="Honda Civic EK with a white front bumper and splitter"><figcaption>Honda Civic EK</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blackout Series -->
+    <section class="mk-section mk-detail" aria-labelledby="mk-detail-title">
+      <div class="mk-wrap mk-detail__grid">
+        <div class="mk-detail__copy" data-mk-reveal>
+          <h2 id="mk-detail-title">Blackout Series</h2>
+          <p>Dressings and tools for tyres and trim, from the same workshop.</p>
+          <ul>
+            <li><a href="#p"><span>Plastic</span><span>RM 49.00</span></a></li>
+            <li><a href="#p"><span>Plastic starter pack</span><span>RM 59.00</span></a></li>
+            <li><a href="#p"><span>Microfiber cloth</span><span>RM 9.99</span></a></li>
+            <li><a href="#p"><span>Detailing sponge</span><span>RM 5.99</span></a></li>
+          </ul>
+        </div>
+        <div class="mk-detail__img"><img src="assets/blackout.jpg" width="1536" height="1024" loading="lazy" alt="Mekarya Blackout Series bottles for tyres and plastics"></div>
+      </div>
+    </section>
+
+    <!-- CTA: one word is the button -->
+    <section class="mk-cta" aria-labelledby="mk-cta-title">
+      <a href="/pages/build-status">
+        <p class="mk-cta__line">Join the waitlist and we'll book your scan slot.</p>
+        <svg class="mk-cta__arrow" viewBox="0 0 48 48" aria-hidden="true"><path d="M12 36 36 12M16 12h20v20" fill="none" stroke="currentColor" stroke-width="5"/></svg>
+        <h2 id="mk-cta-title">Start</h2>
+      </a>
+    </section>
+
+    <!-- Closing: name first -->
+    <section class="mk-section mk-close" aria-labelledby="mk-close-title">
+      <div class="mk-wrap">
+        <h2 class="mk-close__name" id="mk-close-title">Mekarya</h2>
+        <div class="mk-close__row">
+          <ul class="mk-close__places">
+            <li><a href="https://instagram.com/mekarya.world">Instagram @mekarya.world</a></li>
+            <li><a href="https://tiktok.com/@mekarya.world">TikTok @mekarya.world</a></li>
+          </ul>
+          <div class="mk-close__links">
+            <ul><li><a href="#perisai">Widebody kits</a></li><li><a href="#aero">Aero kits</a></li><li><a href="#detail">Blackout Series</a></li></ul>
+            <ul><li><a href="/pages/build-status">Track your build</a></li><li><a href="/pages/build-status">Join the waitlist</a></li></ul>
+            <ul><li><a href="/pages/contact">Contact</a></li><li><a href="/policies/terms-of-service">Terms</a></li></ul>
+          </div>
+        </div>
+        <div class="mk-close__legal"><span>© 2026 Mekarya World · Digitally engineered. Hand-finished.</span><a class="mk-link" href="#top">Back to top</a></div>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="mk-home.js"></script>
+</body>
+</html>
